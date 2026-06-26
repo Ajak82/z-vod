@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrace na běžecký závod</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f5f3;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid #e8e8e6;
+      padding: 2rem;
+      width: 100%;
+      max-width: 560px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    h1 { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
+    .subtitle { font-size: 13px; color: #888; margin-bottom: 1.75rem; }
+    .section-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.07em;
+      text-transform: uppercase; color: #aaa;
+      margin: 1.5rem 0 0.75rem;
+      padding-bottom: 6px; border-bottom: 1px solid #f0f0ee;
+    }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+    label { font-size: 13px; font-weight: 500; color: #555; }
+    .optional { font-weight: 400; color: #bbb; font-size: 11px; margin-left: 4px; }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="date"], select {
+      width: 100%; height: 38px; padding: 0 12px; font-size: 14px;
+      border: 1px solid #ddd; border-radius: 8px;
+      background: #fff; color: #1a1a1a;
+      transition: border-color 0.15s, box-shadow 0.15s; font-family: inherit;
+    }
+    input:focus, select:focus {
+      outline: none; border-color: #4a90d9;
+      box-shadow: 0 0 0 3px rgba(74,144,217,0.15);
+    }
+    .error-msg { font-size: 12px; color: #e53e3e; display: none; }
+    .field.invalid input, .field.invalid select { border-color: #e53e3e; }
+    .field.invalid .error-msg { display: block; }
+
+    /* Výběr tratě – velké dlaždice */
+    .trat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .trat-option input[type="radio"] { display: none; }
+    .trat-option label {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 4px; padding: 14px 10px; border: 1.5px solid #ddd; border-radius: 10px;
+      cursor: pointer; transition: all 0.15s; text-align: center;
+      font-size: 13px; font-weight: 500; color: #555;
+    }
+    .trat-option label .icon { font-size: 22px; }
+    .trat-option label .nazev { font-size: 14px; font-weight: 600; color: #1a1a1a; }
+    .trat-option label .popis { font-size: 11px; color: #aaa; font-weight: 400; }
+    .trat-option input:checked + label {
+      border-color: #1a1a1a; background: #f9f9f8;
+      box-shadow: 0 0 0 2px #1a1a1a;
+    }
+    .trat-option label:hover { border-color: #999; }
+    #f-trat.invalid .trat-grid label { border-color: #e53e3e; }
+    #f-trat .error-msg { display: none; }
+    #f-trat.invalid .error-msg { display: block; }
+
+    /* Checkbox */
+    .checkbox-field { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+    .checkbox-field input[type="checkbox"] {
+      width: 16px; height: 16px; min-width: 16px; margin-top: 2px;
+      accent-color: #1a1a1a; cursor: pointer;
+    }
+    .checkbox-field label { font-size: 13px; color: #555; cursor: pointer; line-height: 1.5; }
+    .checkbox-field .error-msg { display: none; font-size: 12px; color: #e53e3e; margin-top: 2px; }
+    .checkbox-field.invalid .error-msg { display: block; }
+    .checkbox-wrap { display: flex; flex-direction: column; }
+
+    .btn {
+      width: 100%; height: 42px; background: #1a1a1a; color: #fff;
+      border: none; border-radius: 8px; font-size: 14px; font-weight: 500;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      gap: 8px; margin-top: 1.25rem; transition: background 0.4s, transform 0.4s, left 0.8s cubic-bezier(0.22,1,0.36,1), top 0.8s cubic-bezier(0.22,1,0.36,1);
+      font-family: inherit;
+    }
+    .btn:hover { background: #333; }
+    .btn:active { transform: scale(0.99); }
+    .btn:disabled { background: #aaa; cursor: not-allowed; }
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
+      border-radius: 50%; animation: spin 0.6s linear infinite; display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .success-screen { display: none; text-align: center; padding: 1.5rem 0; }
+    .checkmark {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: #f0faf4; border: 1.5px solid #68d391;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem; font-size: 24px;
+    }
+    .success-screen h2 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+    .success-screen p { font-size: 13px; color: #888; margin-bottom: 1.5rem; }
+    .btn-outline {
+      display: inline-flex; align-items: center; height: 38px; padding: 0 1.5rem;
+      background: transparent; color: #1a1a1a; border: 1px solid #ddd;
+      border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer;
+      font-family: inherit; transition: background 0.4s;
+    }
+    .btn-outline:hover { background: #f5f5f3; }
+    .hint {
+      margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #f0f0ee;
+      font-size: 11px; color: #bbb; text-align: center;
+    }
+    .hint code { background: #f5f5f3; padding: 2px 5px; border-radius: 4px; font-size: 10px; color: #666; }
+
+    /* Útíkající tlačítko */
+    #submitBtn {
+      position: relative;
+      transition: background 0.4s, transform 0.4s, left 0.8s cubic-bezier(0.22,1,0.36,1), top 0.8s cubic-bezier(0.22,1,0.36,1);
+    @media (max-width: 480px) { .row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div id="formScreen">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem;">
+      <h1 id="nadpis">Registrace na svatební závod</h1>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:3px; background:#f5f5f3; border-radius:10px; padding:3px;">
+        <button onclick="setJazyk('cs')" id="btn-cs" style="border:none; border-radius:7px; padding:5px 10px; font-size:11px; font-weight:700; cursor:pointer; background:#1a1a1a; color:#fff; font-family:inherit; line-height:1;">CZ</button>
+        <button onclick="setJazyk('sk')" id="btn-sk" style="border:none; border-radius:7px; padding:5px 10px; font-size:11px; font-weight:700; cursor:pointer; background:transparent; color:#888; font-family:inherit; line-height:1;">SK</button>
+        <button onclick="setJazyk('pl')" id="btn-pl" style="border:none; border-radius:7px; padding:5px 10px; font-size:11px; font-weight:700; cursor:pointer; background:transparent; color:#888; font-family:inherit; line-height:1;">PL</button>
+        <button onclick="setJazyk('en')" id="btn-en" style="border:none; border-radius:7px; padding:5px 10px; font-size:11px; font-weight:700; cursor:pointer; background:transparent; color:#888; font-family:inherit; line-height:1;">EN</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field" id="f-jmeno">
+        <label for="jmeno">Jméno</label>
+        <input type="text" id="jmeno" placeholder="Jan">
+        <span class="error-msg">Povinné pole</span>
+      </div>
+      <div class="field" id="f-prijmeni">
+        <label for="prijmeni">Příjmení</label>
+        <input type="text" id="prijmeni" placeholder="Novák">
+        <span class="error-msg">Povinné pole</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field" id="f-datum">
+        <label for="datum">Datum narození</label>
+        <input type="date" id="datum">
+        <span class="error-msg">Povinné pole</span>
+      </div>
+      <div class="field" id="f-pohlavi">
+        <label for="pohlavi">Pohlaví</label>
+        <select id="pohlavi">
+          <option value="">— Vyber —</option>
+          <option>Muž</option>
+          <option>Žena</option>
+          <option>Neuvedeno</option>
+        </select>
+        <span class="error-msg">Povinné pole</span>
+      </div>
+    </div>
+    <div class="field" id="f-email">
+      <label for="email">E-mail</label>
+      <input type="email" id="email" placeholder="jan@example.com">
+      <span class="error-msg">Zadej platný e-mail</span>
+    </div>
+    <div class="field" id="f-trat">
+      <label>Vyber svou disciplínu</label>
+      <div class="trat-grid">
+        <div class="trat-option">
+          <input type="radio" name="trat" id="trat-beh" value="Běh 8 km">
+          <label for="trat-beh">
+            <span class="icon">🏃</span>
+            <span class="nazev">Běh 8 km</span>
+            <span class="popis">Trasa lesem a polem</span>
+          </label>
+        </div>
+        <div class="trat-option">
+          <input type="radio" name="trat" id="trat-prosecco" value="Prosecco & párty">
+          <label for="trat-prosecco">
+            <span class="icon">🥂</span>
+            <span class="nazev">Prosecco & párty</span>
+            <span class="popis">Pro ty ostatní</span>
+          </label>
+        </div>
+      </div>
+      <span class="error-msg">Vyber disciplínu</span>
+    </div>
+
+    <div class="field" id="f-kategorie-display" style="display:none;">
+      <label>Věková kategorie</label>
+      <div id="kategorie-badge" style="
+        display: inline-flex; align-items: center; gap: 6px;
+        height: 38px; padding: 0 12px; border-radius: 8px;
+        background: #f0faf4; border: 1px solid #68d391;
+        font-size: 14px; font-weight: 500; color: #276749;
+      "></div>
+    </div>
+    <div class="field" id="f-klub">
+      <label for="klub">Klub / oddíl <span class="optional">nepovinné</span></label>
+      <input type="text" id="klub" placeholder="např. SK Satalice">
+    </div>
+    <div class="field">
+      <div class="checkbox-field" id="cb-gdpr">
+        <input type="checkbox" id="gdpr">
+        <div class="checkbox-wrap">
+          <label for="gdpr" id="label-gdpr">Souhlasím se zpracováním osobních údajů dle GDPR <span style="color:#e53e3e">*</span></label>
+          <span class="error-msg" id="err-gdpr">Souhlas je povinný</span>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <div class="checkbox-field" id="cb-foto">
+        <input type="checkbox" id="foto">
+        <div class="checkbox-wrap">
+          <label for="foto" id="label-foto">Souhlasím s pořízením a zveřejněním fotografií ze závodu <span style="color:#e53e3e">*</span></label>
+          <span class="error-msg" id="err-foto">Souhlas je povinný</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn" id="submitBtn" onclick="odeslat()">
+      <span id="btnText">Odeslat registraci</span>
+      <div class="spinner" id="spinner"></div>
+    </button>
+
+    <div class="hint">Vlož URL svého Apps Scriptu místo <code>VLOŽTE_URL_SKRIPTU</code> v kódu</div>
+  </div>
+
+  <div class="success-screen" id="successScreen">
+    <div class="checkmark">✓</div>
+    <h2>Registrace přijata!</h2>
+    <p>Data byla uložena do Google Tabulky.<br>Potvrzení ti přijde na e-mail.</p>
+    <button class="btn-outline" onclick="resetForm()">← Nová registrace</button>
+  </div>
+</div>
+
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxbTdwDC0cNHTHJIZZFNkK8WuWuQGVjwG-3IPTWIjwpjiOjWe40ct1Y88W_T25cowgB/exec";
+
+  const preklady = {
+    cs: {
+      nadpis: 'Registrace na svatební závod',
+      jmeno: 'Jméno', prijmeni: 'Příjmení',
+      datum: 'Datum narození', pohlavi: 'Pohlaví',
+      pohlaviVolby: ['— Vyber —', 'Muž', 'Žena', 'Neuvedeno'],
+      email: 'E-mail',
+      disciplina: 'Vyber svou disciplínu',
+      behNazev: 'Běh 8 km', behPopis: 'Trasa lesem a polem',
+      proseccoNazev: 'Prosecco & párty', proseccoPopis: 'Pro ty ostatní',
+      errDisciplina: 'Vyber disciplínu',
+      vekovaKat: 'Věková kategorie',
+      klub: 'Klub / oddíl', klubOpt: 'nepovinné',
+      gdprText: 'Souhlasím se zpracováním osobních údajů dle GDPR',
+      errGdpr: 'Souhlas je povinný',
+      fotoText: 'Souhlasím s pořízením a zveřejněním fotografií ze závodu',
+      errFoto: 'Souhlas je povinný',
+      odeslat: 'Odeslat registraci', odesilam: 'Odesílám…',
+      uspechH: 'Registrace přijata!', uspechP: 'Data byla uložena do Google Tabulky.',
+      nova: '← Nová registrace',
+      errPovinne: 'Povinné pole', errEmail: 'Zadej platný e-mail',
+      katLabels: ['Do 18 let (Junior)', '19–39 let (Dospělí)', '40–49 let (Masters)', '50–59 let (Veterans)', '60+ let (Super veterans)'],
+    },
+    sk: {
+      nadpis: 'Registrácia na svadobný závod',
+      jmeno: 'Meno', prijmeni: 'Priezvisko',
+      datum: 'Dátum narodenia', pohlavi: 'Pohlavie',
+      pohlaviVolby: ['— Vyber —', 'Muž', 'Žena', 'Neuvedené'],
+      email: 'E-mail',
+      disciplina: 'Vyber svoju disciplínu',
+      behNazev: 'Beh 8 km', behPopis: 'Trasa lesom a poľom',
+      proseccoNazev: 'Prosecco & párty', proseccoPopis: 'Pre tých ostatných',
+      errDisciplina: 'Vyber disciplínu',
+      vekovaKat: 'Veková kategória',
+      klub: 'Klub / oddiel', klubOpt: 'nepovinné',
+      gdprText: 'Súhlasím so spracovaním osobných údajov podľa GDPR',
+      errGdpr: 'Súhlas je povinný',
+      fotoText: 'Súhlasím s vyhotovením a zverejnením fotografií zo závodu',
+      errFoto: 'Súhlas je povinný',
+      odeslat: 'Odoslať registráciu', odesilam: 'Odosielam…',
+      uspechH: 'Registrácia prijatá!', uspechP: 'Dáta boli uložené do Google Tabuľky.',
+      nova: '← Nová registrácia',
+      errPovinne: 'Povinné pole', errEmail: 'Zadaj platný e-mail',
+      katLabels: ['Do 18 rokov (Junior)', '19–39 rokov (Dospelí)', '40–49 rokov (Masters)', '50–59 rokov (Veterans)', '60+ rokov (Super veterans)'],
+    },
+    pl: {
+      nadpis: 'Rejestracja na ślubny wyścig',
+      jmeno: 'Imię', prijmeni: 'Nazwisko',
+      datum: 'Data urodzenia', pohlavi: 'Płeć',
+      pohlaviVolby: ['— Wybierz —', 'Mężczyzna', 'Kobieta', 'Nie podano'],
+      email: 'E-mail',
+      disciplina: 'Wybierz swoją dyscyplinę',
+      behNazev: 'Bieg 8 km', behPopis: 'Trasa przez las i pola',
+      proseccoNazev: 'Prosecco & impreza', proseccoPopis: 'Dla pozostałych',
+      errDisciplina: 'Wybierz dyscyplinę',
+      vekovaKat: 'Kategoria wiekowa',
+      klub: 'Klub / sekcja', klubOpt: 'opcjonalne',
+      gdprText: 'Wyrażam zgodę na przetwarzanie danych osobowych zgodnie z RODO',
+      errGdpr: 'Zgoda jest wymagana',
+      fotoText: 'Wyrażam zgodę na wykonanie i publikację zdjęć z zawodów',
+      errFoto: 'Zgoda jest wymagana',
+      odeslat: 'Wyślij rejestrację', odesilam: 'Wysyłam…',
+      uspechH: 'Rejestracja przyjęta!', uspechP: 'Dane zostały zapisane w Arkuszu Google.',
+      nova: '← Nowa rejestracja',
+      errPovinne: 'Pole wymagane', errEmail: 'Podaj prawidłowy e-mail',
+      katLabels: ['Do 18 lat (Junior)', '19–39 lat (Dorośli)', '40–49 lat (Masters)', '50–59 lat (Veterans)', '60+ lat (Super veterans)'],
+    },
+    en: {
+      nadpis: 'Wedding Race Registration',
+      jmeno: 'First name', prijmeni: 'Last name',
+      datum: 'Date of birth', pohlavi: 'Gender',
+      pohlaviVolby: ['— Select —', 'Male', 'Female', 'Prefer not to say'],
+      email: 'E-mail',
+      disciplina: 'Choose your discipline',
+      behNazev: '8 km Run', behPopis: 'Forest and field trail',
+      proseccoNazev: 'Prosecco & party', proseccoPopis: 'For everyone else',
+      errDisciplina: 'Please select a discipline',
+      vekovaKat: 'Age category',
+      klub: 'Club / team', klubOpt: 'optional',
+      gdprText: 'I consent to the processing of my personal data under GDPR',
+      errGdpr: 'Consent is required',
+      fotoText: 'I consent to photos being taken and published from the event',
+      errFoto: 'Consent is required',
+      odeslat: 'Submit registration', odesilam: 'Submitting…',
+      uspechH: 'Registration received!', uspechP: 'Your data has been saved to Google Sheets.',
+      nova: '← New registration',
+      errPovinne: 'Required field', errEmail: 'Enter a valid e-mail',
+      katLabels: ['Under 18 (Junior)', '19–39 (Adult)', '40–49 (Masters)', '50–59 (Veterans)', '60+ (Super veterans)'],
+    }
+  };
+
+  let jazyk = 'cs';
+
+  function setJazyk(lang) {
+    jazyk = lang;
+    const t = preklady[lang];
+    document.getElementById('nadpis').textContent = t.nadpis;
+    document.querySelector('label[for="jmeno"]').textContent = t.jmeno;
+    document.querySelector('label[for="prijmeni"]').textContent = t.prijmeni;
+    document.querySelector('label[for="datum"]').textContent = t.datum;
+    document.querySelector('label[for="pohlavi"]').textContent = t.pohlavi;
+    const opts = document.querySelectorAll('#pohlavi option');
+    t.pohlaviVolby.forEach((v, i) => { if (opts[i]) opts[i].textContent = v; });
+    document.querySelector('label[for="email"]').textContent = t.email;
+    document.querySelector('#f-trat > label').textContent = t.disciplina;
+    document.querySelector('#trat-beh + label .nazev').textContent = t.behNazev;
+    document.querySelector('#trat-beh + label .popis').textContent = t.behPopis;
+    document.querySelector('#trat-prosecco + label .nazev').textContent = t.proseccoNazev;
+    document.querySelector('#trat-prosecco + label .popis').textContent = t.proseccoPopis;
+    document.querySelector('#f-trat .error-msg').textContent = t.errDisciplina;
+    document.querySelector('#f-kategorie-display > label').textContent = t.vekovaKat;
+    document.querySelector('label[for="klub"]').firstChild.textContent = t.klub + ' ';
+    document.getElementById('label-gdpr').innerHTML = t.gdprText + ' <span style="color:#e53e3e">*</span>';
+    document.getElementById('err-gdpr').textContent = t.errGdpr;
+    document.getElementById('label-foto').innerHTML = t.fotoText + ' <span style="color:#e53e3e">*</span>';
+    document.getElementById('err-foto').textContent = t.errFoto;
+    document.getElementById('btnText').textContent = t.odeslat;
+    document.querySelector('.success-screen h2').textContent = t.uspechH;
+    document.querySelector('.success-screen p').textContent = t.uspechP;
+    document.querySelector('.btn-outline').textContent = t.nova;
+    document.querySelectorAll('#f-jmeno .error-msg, #f-prijmeni .error-msg, #f-datum .error-msg, #f-pohlavi .error-msg, #f-klub .error-msg').forEach(e => e.textContent = t.errPovinne);
+    document.querySelector('#f-email .error-msg').textContent = t.errEmail;
+    // Obnov badge kategorie pokud je viditelný
+    const datumVal = document.getElementById('datum').value;
+    if (datumVal) {
+      const kat = spocitejKategorii(datumVal);
+      if (kat) document.getElementById('kategorie-badge').textContent = '✓ ' + kat;
+    }
+    ['cs','sk','pl','en'].forEach(l => {
+      const b = document.getElementById('btn-' + l);
+      b.style.background = l === lang ? '#1a1a1a' : 'transparent';
+      b.style.color = l === lang ? '#fff' : '#888';
+    });
+  }
+
+  function spocitejKategorii(datum) {
+    if (!datum) return null;
+    const narozeni = new Date(datum);
+    const dnes = new Date();
+    let vek = dnes.getFullYear() - narozeni.getFullYear();
+    const mesic = dnes.getMonth() - narozeni.getMonth();
+    if (mesic < 0 || (mesic === 0 && dnes.getDate() < narozeni.getDate())) vek--;
+    const t = preklady[jazyk];
+    if (vek < 18)  return t.katLabels[0];
+    if (vek < 40)  return t.katLabels[1];
+    if (vek < 50)  return t.katLabels[2];
+    if (vek < 60)  return t.katLabels[3];
+    return t.katLabels[4];
+  }
+
+  document.getElementById('datum').addEventListener('change', function() {
+    const kat = spocitejKategorii(this.value);
+    const badge = document.getElementById('kategorie-badge');
+    const display = document.getElementById('f-kategorie-display');
+    if (kat) {
+      badge.textContent = '✓ ' + kat;
+      display.style.display = 'block';
+    } else {
+      display.style.display = 'none';
+    }
+  });
+
+  function validate() {
+    let ok = true;
+    const t = preklady[jazyk];
+    const pole = [
+      { id: 'f-jmeno',    check: () => document.getElementById('jmeno').value.trim() !== '' },
+      { id: 'f-prijmeni', check: () => document.getElementById('prijmeni').value.trim() !== '' },
+      { id: 'f-datum',    check: () => document.getElementById('datum').value !== '' },
+      { id: 'f-pohlavi',  check: () => document.getElementById('pohlavi').value !== '' },
+      { id: 'f-email',    check: () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value) },
+    ];
+    pole.forEach(({ id, check }) => {
+      const el = document.getElementById(id);
+      if (!check()) { el.classList.add('invalid'); ok = false; }
+      else el.classList.remove('invalid');
+    });
+
+    const tratEl = document.getElementById('f-trat');
+    const tratVybrana = document.querySelector('input[name="trat"]:checked');
+    if (!tratVybrana) { tratEl.classList.add('invalid'); ok = false; }
+    else tratEl.classList.remove('invalid');
+
+    const gdprEl = document.getElementById('cb-gdpr');
+    if (!document.getElementById('gdpr').checked) { gdprEl.classList.add('invalid'); ok = false; }
+    else gdprEl.classList.remove('invalid');
+
+    const fotoEl = document.getElementById('cb-foto');
+    if (!document.getElementById('foto').checked) { fotoEl.classList.add('invalid'); ok = false; }
+    else fotoEl.classList.remove('invalid');
+
+    return ok;
+  }
+
+  async function odeslat() {
+    if (!validate()) return;
+    const t = preklady[jazyk];
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    document.getElementById('btnText').textContent = t.odesilam;
+    document.getElementById('spinner').style.display = 'block';
+
+    const tratVybrana = document.querySelector('input[name="trat"]:checked');
+    const datumVal = document.getElementById('datum').value;
+    const data = {
+      jazyk:     jazyk.toUpperCase(),
+      jmeno:     document.getElementById('jmeno').value.trim(),
+      prijmeni:  document.getElementById('prijmeni').value.trim(),
+      datum:     datumVal,
+      pohlavi:   document.getElementById('pohlavi').value,
+      email:     document.getElementById('email').value.trim(),
+      trat:      tratVybrana ? tratVybrana.value : '',
+      kategorie: spocitejKategorii(datumVal),
+      klub:      document.getElementById('klub').value.trim(),
+      gdpr:      document.getElementById('gdpr').checked ? 'Ano' : 'Ne',
+      foto:      document.getElementById('foto').checked ? 'Ano' : 'Ne',
+    };
+
+    try {
+      await fetch(SCRIPT_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      document.getElementById('formScreen').style.display = 'none';
+
+      // 🥚 Easter egg — detekce speciálních jmen
+      const jm = document.getElementById('jmeno').value.trim().toLowerCase();
+      const pj = document.getElementById('prijmeni').value.trim().toLowerCase();
+      const normalize = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      const nj = normalize(jm), np = normalize(pj);
+
+      const easterEgg = (() => {
+        if (np === 'cerny' && (nj === 'vojtech' || nj === 'vojta')) return 'eo';
+        if (np === 'cerny' && (nj === 'michal' || nj === 'misa')) return 'fr';
+        if (np === 'jaros' && nj === 'adam') return 'ar';
+        return null;
+      })();
+
+      const uspechTexty = {
+        eo: { h: 'Registriĝo akceptita!', p: 'Viaj datumoj estis konservitaj. Ĝis la konkurso! 🏃', nova: '← Nova registriĝo' },
+        fr: { h: 'Inscription reçue !', p: 'Vos données ont été enregistrées. À bientôt sur la ligne de départ ! 🥂', nova: '← Nouvelle inscription' },
+        ar: { h: '!تم قبول التسجيل', p: '.تم حفظ بياناتك. نراك في السباق 🏃', nova: 'تسجيل جديد ←', rtl: true },
+      };
+
+      if (easterEgg && uspechTexty[easterEgg]) {
+        const e = uspechTexty[easterEgg];
+        document.querySelector('.success-screen h2').textContent = e.h;
+        document.querySelector('.success-screen p').textContent = e.p;
+        document.querySelector('.btn-outline').textContent = e.nova;
+        if (e.rtl) document.getElementById('successScreen').setAttribute('dir', 'rtl');
+      } else {
+        const t = preklady[jazyk];
+        document.querySelector('.success-screen h2').textContent = t.uspechH;
+        document.querySelector('.success-screen p').textContent = t.uspechP;
+        document.querySelector('.btn-outline').textContent = t.nova;
+        document.getElementById('successScreen').removeAttribute('dir');
+      }
+
+      document.getElementById('successScreen').style.display = 'block';
+    } catch (err) {
+      alert('Chyba při odesílání. Zkontroluj URL skriptu.');
+      btn.disabled = false;
+      document.getElementById('btnText').textContent = t.odeslat;
+      document.getElementById('spinner').style.display = 'none';
+    }
+  }
+
+  function resetForm() {
+    document.querySelectorAll('input[type="text"], input[type="email"], input[type="date"]').forEach(i => i.value = '');
+    document.querySelectorAll('select').forEach(s => s.value = '');
+    document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(c => c.checked = false);
+    document.querySelectorAll('.field, .checkbox-field').forEach(f => f.classList.remove('invalid'));
+    document.getElementById('f-kategorie-display').style.display = 'none';
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = false;
+    document.getElementById('btnText').textContent = preklady[jazyk].odeslat;
+    document.getElementById('spinner').style.display = 'none';
+    document.getElementById('formScreen').style.display = 'block';
+    document.getElementById('successScreen').style.display = 'none';
+  }
+
+  // Útíkající tlačítko
+  (function() {
+    const btn = document.getElementById('submitBtn');
+    let running = false;
+
+    btn.addEventListener('mouseenter', function() {
+      if (running) return;
+      // Ověř zda je formulář validní — pokud ano, nechej tlačítko být
+      const jmeno = document.getElementById('jmeno').value.trim();
+      const prijmeni = document.getElementById('prijmeni').value.trim();
+      const datum = document.getElementById('datum').value;
+      const pohlavi = document.getElementById('pohlavi').value;
+      const email = document.getElementById('email').value.trim();
+      const trat = document.querySelector('input[name="trat"]:checked');
+      const gdpr = document.getElementById('gdpr').checked;
+      const foto = document.getElementById('foto').checked;
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      const vsePlyni = jmeno && prijmeni && datum && pohlavi && emailOk && trat && gdpr && foto;
+      if (!vsePlyni) {
+        // Formulář nevyplněn — vrať tlačítko na místo a nech ho stát
+        btn.style.position = '';
+        btn.style.width = '';
+        btn.style.left = '';
+        btn.style.top = '';
+        return;
+      }
+
+      running = true;
+      const card = document.querySelector('.card');
+      const cardRect = card.getBoundingClientRect();
+      const btnRect = btn.getBoundingClientRect();
+
+      const maxX = cardRect.width - btnRect.width - 4;
+      const maxY = cardRect.height - btnRect.height - 4;
+
+      // Relativní pozice tlačítka vůči cardu
+      const relX = btnRect.left - cardRect.left;
+      const relY = btnRect.top - cardRect.top;
+
+      // Náhodný nový cíl — nikam mimo card
+      let nx = Math.random() * maxX;
+      let ny = Math.random() * maxY;
+      // Zajisti aby neutekl příliš blízko aktuální pozice
+      if (Math.abs(nx - relX) < 80) nx = (nx + 120) % maxX;
+      if (Math.abs(ny - relY) < 40) ny = (ny + 80) % maxY;
+
+      btn.style.position = 'absolute';
+      btn.style.width = btnRect.width + 'px';
+      btn.style.left = nx + 'px';
+      btn.style.top = ny + 'px';
+      btn.style.transition = '';
+
+      // Ujisti se že card má position relative
+      card.style.position = 'relative';
+
+      setTimeout(() => { running = false; }, 850);
+    });
+  })();
+</script>
+</body>
+</html>
