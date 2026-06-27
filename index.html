@@ -50,7 +50,6 @@
     .field.invalid input, .field.invalid select { border-color: #e53e3e; }
     .field.invalid .error-msg { display: block; }
 
-    /* Výběr tratě – velké dlaždice */
     .trat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
     .trat-option input[type="radio"] { display: none; }
     .trat-option label {
@@ -71,7 +70,6 @@
     #f-trat .error-msg { display: none; }
     #f-trat.invalid .error-msg { display: block; }
 
-    /* Checkbox */
     .checkbox-field { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
     .checkbox-field input[type="checkbox"] {
       width: 16px; height: 16px; min-width: 16px; margin-top: 2px;
@@ -86,7 +84,8 @@
       width: 100%; height: 42px; background: #1a1a1a; color: #fff;
       border: none; border-radius: 8px; font-size: 14px; font-weight: 500;
       cursor: pointer; display: flex; align-items: center; justify-content: center;
-      gap: 8px; margin-top: 1.25rem; transition: background 0.4s, transform 0.4s, left 0.8s cubic-bezier(0.22,1,0.36,1), top 0.8s cubic-bezier(0.22,1,0.36,1);
+      gap: 8px; margin-top: 1.25rem;
+      transition: background 0.4s, transform 0.4s, left 0.8s cubic-bezier(0.22,1,0.36,1), top 0.8s cubic-bezier(0.22,1,0.36,1);
       font-family: inherit;
     }
     .btn:hover { background: #333; }
@@ -98,6 +97,11 @@
       border-radius: 50%; animation: spin 0.6s linear infinite; display: none;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    #submitBtn {
+      position: relative;
+      transition: background 0.4s, transform 0.4s, left 0.8s cubic-bezier(0.22,1,0.36,1), top 0.8s cubic-bezier(0.22,1,0.36,1);
+    }
 
     .success-screen { display: none; text-align: center; padding: 1.5rem 0; }
     .checkmark {
@@ -115,16 +119,7 @@
       font-family: inherit; transition: background 0.4s;
     }
     .btn-outline:hover { background: #f5f5f3; }
-    .hint {
-      margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #f0f0ee;
-      font-size: 11px; color: #bbb; text-align: center;
-    }
-    .hint code { background: #f5f5f3; padding: 2px 5px; border-radius: 4px; font-size: 10px; color: #666; }
 
-    /* Útíkající tlačítko */
-    #submitBtn {
-      position: relative;
-      transition: background 0.4s, transform 0.4s, left 0.8s cubic-bezier(0.22,1,0.36,1), top 0.8s cubic-bezier(0.22,1,0.36,1);
     @media (max-width: 480px) { .row { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -161,7 +156,7 @@
       </div>
       <div class="field" id="f-pohlavi">
         <label for="pohlavi">Pohlaví</label>
-        <select id="pohlavi">
+        <select id="pohlavi" onchange="aktualizujKategorii()">
           <option value="">— Vyber —</option>
           <option>Muž</option>
           <option>Žena</option>
@@ -175,6 +170,7 @@
       <input type="email" id="email" placeholder="jan@example.com">
       <span class="error-msg">Zadej platný e-mail</span>
     </div>
+
     <div class="field" id="f-trat">
       <label>Vyber svou disciplínu</label>
       <div class="trat-grid">
@@ -190,7 +186,7 @@
           <input type="radio" name="trat" id="trat-prosecco" value="Prosecco & párty">
           <label for="trat-prosecco">
             <span class="icon">🥂</span>
-            <span class="nazev">Prosecco & párty</span>
+            <span class="nazev">Prosecco</span>
             <span class="popis">Pro ty ostatní</span>
           </label>
         </div>
@@ -199,7 +195,7 @@
     </div>
 
     <div class="field" id="f-kategorie-display" style="display:none;">
-      <label>Věková kategorie</label>
+      <label id="label-kategorie">Věková kategorie</label>
       <div id="kategorie-badge" style="
         display: inline-flex; align-items: center; gap: 6px;
         height: 38px; padding: 0 12px; border-radius: 8px;
@@ -207,6 +203,7 @@
         font-size: 14px; font-weight: 500; color: #276749;
       "></div>
     </div>
+
     <div class="field" id="f-klub">
       <label for="klub">Klub / oddíl <span class="optional">nepovinné</span></label>
       <input type="text" id="klub" placeholder="např. SK Satalice">
@@ -234,20 +231,43 @@
       <span id="btnText">Odeslat registraci</span>
       <div class="spinner" id="spinner"></div>
     </button>
-
-    <div class="hint">Vlož URL svého Apps Scriptu místo <code>VLOŽTE_URL_SKRIPTU</code> v kódu</div>
   </div>
 
   <div class="success-screen" id="successScreen">
     <div class="checkmark">✓</div>
     <h2>Registrace přijata!</h2>
-    <p>Data byla uložena do Google Tabulky.<br>Potvrzení ti přijde na e-mail.</p>
+    <p>Data byla uložena.<br>Potvrzení ti přijde na e-mail.</p>
     <button class="btn-outline" onclick="resetForm()">← Nová registrace</button>
   </div>
 </div>
 
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwejemzZ8oqKSjisJGigSxmNkAavPbSdRPNcfw-t7mCC8SnaltUDSsAhQEiAlRjGSZp/exec";
+
+  // Kategorie rozdělené podle pohlaví
+  const kategorie = {
+    muz: [
+      { label: { cs: 'Do 18 let – Muži (Junior)', sk: 'Do 18 rokov – Muži (Junior)', pl: 'Do 18 lat – Mężczyźni (Junior)', en: 'Under 18 – Men (Junior)' }, max: 18 },
+      { label: { cs: '19–39 let – Muži', sk: '19–39 rokov – Muži', pl: '19–39 lat – Mężczyźni', en: '19–39 – Men' }, max: 40 },
+      { label: { cs: '40–49 let – Muži (Masters)', sk: '40–49 rokov – Muži (Masters)', pl: '40–49 lat – Mężczyźni (Masters)', en: '40–49 – Men (Masters)' }, max: 50 },
+      { label: { cs: '50–59 let – Muži (Veterans)', sk: '50–59 rokov – Muži (Veterans)', pl: '50–59 lat – Mężczyźni (Veterans)', en: '50–59 – Men (Veterans)' }, max: 60 },
+      { label: { cs: '60+ let – Muži (Super veterans)', sk: '60+ rokov – Muži (Super veterans)', pl: '60+ lat – Mężczyźni (Super veterans)', en: '60+ – Men (Super veterans)' }, max: 999 },
+    ],
+    zena: [
+      { label: { cs: 'Do 18 let – Ženy (Junior)', sk: 'Do 18 rokov – Ženy (Junior)', pl: 'Do 18 lat – Kobiety (Junior)', en: 'Under 18 – Women (Junior)' }, max: 18 },
+      { label: { cs: '19–39 let – Ženy', sk: '19–39 rokov – Ženy', pl: '19–39 lat – Kobiety', en: '19–39 – Women' }, max: 40 },
+      { label: { cs: '40–49 let – Ženy (Masters)', sk: '40–49 rokov – Ženy (Masters)', pl: '40–49 lat – Kobiety (Masters)', en: '40–49 – Women (Masters)' }, max: 50 },
+      { label: { cs: '50–59 let – Ženy (Veterans)', sk: '50–59 rokov – Ženy (Veterans)', pl: '50–59 lat – Kobiety (Veterans)', en: '50–59 – Women (Veterans)' }, max: 60 },
+      { label: { cs: '60+ let – Ženy (Super veterans)', sk: '60+ rokov – Ženy (Super veterans)', pl: '60+ lat – Kobiety (Super veterans)', en: '60+ – Women (Super veterans)' }, max: 999 },
+    ],
+    neuvedeno: [
+      { label: { cs: 'Do 18 let (Junior)', sk: 'Do 18 rokov (Junior)', pl: 'Do 18 lat (Junior)', en: 'Under 18 (Junior)' }, max: 18 },
+      { label: { cs: '19–39 let', sk: '19–39 rokov', pl: '19–39 lat', en: '19–39' }, max: 40 },
+      { label: { cs: '40–49 let (Masters)', sk: '40–49 rokov (Masters)', pl: '40–49 lat (Masters)', en: '40–49 (Masters)' }, max: 50 },
+      { label: { cs: '50–59 let (Veterans)', sk: '50–59 rokov (Veterans)', pl: '50–59 lat (Veterans)', en: '50–59 (Veterans)' }, max: 60 },
+      { label: { cs: '60+ let (Super veterans)', sk: '60+ rokov (Super veterans)', pl: '60+ lat (Super veterans)', en: '60+ (Super veterans)' }, max: 999 },
+    ],
+  };
 
   const preklady = {
     cs: {
@@ -270,7 +290,6 @@
       uspechH: 'Registrace přijata!', uspechP: 'Data byla uložena do Google Tabulky.',
       nova: '← Nová registrace',
       errPovinne: 'Povinné pole', errEmail: 'Zadej platný e-mail',
-      katLabels: ['Do 18 let (Junior)', '19–39 let (Dospělí)', '40–49 let (Masters)', '50–59 let (Veterans)', '60+ let (Super veterans)'],
     },
     sk: {
       nadpis: 'Registrácia na svadobný závod',
@@ -292,7 +311,6 @@
       uspechH: 'Registrácia prijatá!', uspechP: 'Dáta boli uložené do Google Tabuľky.',
       nova: '← Nová registrácia',
       errPovinne: 'Povinné pole', errEmail: 'Zadaj platný e-mail',
-      katLabels: ['Do 18 rokov (Junior)', '19–39 rokov (Dospelí)', '40–49 rokov (Masters)', '50–59 rokov (Veterans)', '60+ rokov (Super veterans)'],
     },
     pl: {
       nadpis: 'Rejestracja na ślubny wyścig',
@@ -314,7 +332,6 @@
       uspechH: 'Rejestracja przyjęta!', uspechP: 'Dane zostały zapisane w Arkuszu Google.',
       nova: '← Nowa rejestracja',
       errPovinne: 'Pole wymagane', errEmail: 'Podaj prawidłowy e-mail',
-      katLabels: ['Do 18 lat (Junior)', '19–39 lat (Dorośli)', '40–49 lat (Masters)', '50–59 lat (Veterans)', '60+ lat (Super veterans)'],
     },
     en: {
       nadpis: 'Wedding Race Registration',
@@ -336,7 +353,6 @@
       uspechH: 'Registration received!', uspechP: 'Your data has been saved to Google Sheets.',
       nova: '← New registration',
       errPovinne: 'Required field', errEmail: 'Enter a valid e-mail',
-      katLabels: ['Under 18 (Junior)', '19–39 (Adult)', '40–49 (Masters)', '50–59 (Veterans)', '60+ (Super veterans)'],
     }
   };
 
@@ -359,7 +375,7 @@
     document.querySelector('#trat-prosecco + label .nazev').textContent = t.proseccoNazev;
     document.querySelector('#trat-prosecco + label .popis').textContent = t.proseccoPopis;
     document.querySelector('#f-trat .error-msg').textContent = t.errDisciplina;
-    document.querySelector('#f-kategorie-display > label').textContent = t.vekovaKat;
+    document.getElementById('label-kategorie').textContent = t.vekovaKat;
     document.querySelector('label[for="klub"]').firstChild.textContent = t.klub + ' ';
     document.getElementById('label-gdpr').innerHTML = t.gdprText + ' <span style="color:#e53e3e">*</span>';
     document.getElementById('err-gdpr').textContent = t.errGdpr;
@@ -369,14 +385,10 @@
     document.querySelector('.success-screen h2').textContent = t.uspechH;
     document.querySelector('.success-screen p').textContent = t.uspechP;
     document.querySelector('.btn-outline').textContent = t.nova;
-    document.querySelectorAll('#f-jmeno .error-msg, #f-prijmeni .error-msg, #f-datum .error-msg, #f-pohlavi .error-msg, #f-klub .error-msg').forEach(e => e.textContent = t.errPovinne);
+    document.querySelectorAll('#f-jmeno .error-msg, #f-prijmeni .error-msg, #f-datum .error-msg, #f-pohlavi .error-msg').forEach(e => e.textContent = t.errPovinne);
     document.querySelector('#f-email .error-msg').textContent = t.errEmail;
-    // Obnov badge kategorie pokud je viditelný
-    const datumVal = document.getElementById('datum').value;
-    if (datumVal) {
-      const kat = spocitejKategorii(datumVal);
-      if (kat) document.getElementById('kategorie-badge').textContent = '✓ ' + kat;
-    }
+    // Obnov badge pokud je viditelný
+    aktualizujKategorii();
     ['cs','sk','pl','en'].forEach(l => {
       const b = document.getElementById('btn-' + l);
       b.style.background = l === lang ? '#1a1a1a' : 'transparent';
@@ -384,36 +396,77 @@
     });
   }
 
-  function spocitejKategorii(datum) {
+  function spocitejVek(datum) {
     if (!datum) return null;
-    const narozeni = new Date(datum);
+    const nar = new Date(datum);
     const dnes = new Date();
-    let vek = dnes.getFullYear() - narozeni.getFullYear();
-    const mesic = dnes.getMonth() - narozeni.getMonth();
-    if (mesic < 0 || (mesic === 0 && dnes.getDate() < narozeni.getDate())) vek--;
-    const t = preklady[jazyk];
-    if (vek < 18)  return t.katLabels[0];
-    if (vek < 40)  return t.katLabels[1];
-    if (vek < 50)  return t.katLabels[2];
-    if (vek < 60)  return t.katLabels[3];
-    return t.katLabels[4];
+    let vek = dnes.getFullYear() - nar.getFullYear();
+    const m = dnes.getMonth() - nar.getMonth();
+    if (m < 0 || (m === 0 && dnes.getDate() < nar.getDate())) vek--;
+    return vek;
   }
 
-  document.getElementById('datum').addEventListener('change', function() {
-    const kat = spocitejKategorii(this.value);
+  // Pro tabulku — vždy česky
+  const katCS = {
+    muz:      ['Do 18 let – Muži (Junior)', '19–39 let – Muži', '40–49 let – Muži (Masters)', '50–59 let – Muži (Veterans)', '60+ let – Muži (Super veterans)'],
+    zena:     ['Do 18 let – Ženy (Junior)', '19–39 let – Ženy', '40–49 let – Ženy (Masters)', '50–59 let – Ženy (Veterans)', '60+ let – Ženy (Super veterans)'],
+    neuvedeno:['Do 18 let (Junior)', '19–39 let', '40–49 let (Masters)', '50–59 let (Veterans)', '60+ let (Super veterans)'],
+  };
+
+  function getPohlaviKeyCS(pohlavi) {
+    const n = (pohlavi || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    if (n === 'muz' || n === 'male' || n === 'mężczyzna' || n === 'mecczyzna') return 'muz';
+    if (n === 'zena' || n === 'female' || n === 'kobieta') return 'zena';
+    return 'neuvedeno';
+  }
+
+  function spocitejKategoriiCS(datum, pohlavi) {
+    if (!datum) return null;
+    const nar = new Date(datum);
+    const dnes = new Date();
+    let vek = dnes.getFullYear() - nar.getFullYear();
+    const m = dnes.getMonth() - nar.getMonth();
+    if (m < 0 || (m === 0 && dnes.getDate() < nar.getDate())) vek--;
+    const hranice = [18, 40, 50, 60];
+    const i = hranice.findIndex(h => vek < h);
+    const idx = i === -1 ? 4 : i;
+    return katCS[getPohlaviKeyCS(pohlavi)][idx];
+  }
+
+  function spocitejKategorii(datum, pohlavi) {
+    const vek = spocitejVek(datum);
+    if (vek === null) return null;
+
+    const normalize = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const np = normalize(pohlavi || '');
+
+    let skupina;
+    if (np === 'muz' || np === 'male' || np === 'mężczyzna') skupina = kategorie.muz;
+    else if (np === 'zena' || np === 'female' || np === 'kobieta') skupina = kategorie.zena;
+    else skupina = kategorie.neuvedeno;
+
+    const kat = skupina.find(k => vek < k.max);
+    return kat ? kat.label[jazyk] : skupina[skupina.length - 1].label[jazyk];
+  }
+
+  function aktualizujKategorii() {
+    const datum = document.getElementById('datum').value;
+    const pohlavi = document.getElementById('pohlavi').value;
+    const kat = spocitejKategorii(datum, pohlavi);
     const badge = document.getElementById('kategorie-badge');
     const display = document.getElementById('f-kategorie-display');
-    if (kat) {
+    if (kat && datum) {
       badge.textContent = '✓ ' + kat;
       display.style.display = 'block';
     } else {
       display.style.display = 'none';
     }
-  });
+  }
+
+  document.getElementById('datum').addEventListener('change', aktualizujKategorii);
 
   function validate() {
     let ok = true;
-    const t = preklady[jazyk];
     const pole = [
       { id: 'f-jmeno',    check: () => document.getElementById('jmeno').value.trim() !== '' },
       { id: 'f-prijmeni', check: () => document.getElementById('prijmeni').value.trim() !== '' },
@@ -428,8 +481,7 @@
     });
 
     const tratEl = document.getElementById('f-trat');
-    const tratVybrana = document.querySelector('input[name="trat"]:checked');
-    if (!tratVybrana) { tratEl.classList.add('invalid'); ok = false; }
+    if (!document.querySelector('input[name="trat"]:checked')) { tratEl.classList.add('invalid'); ok = false; }
     else tratEl.classList.remove('invalid');
 
     const gdprEl = document.getElementById('cb-gdpr');
@@ -453,15 +505,19 @@
 
     const tratVybrana = document.querySelector('input[name="trat"]:checked');
     const datumVal = document.getElementById('datum').value;
+    const pohlaviVal = document.getElementById('pohlavi').value;
     const data = {
       jazyk:     jazyk.toUpperCase(),
       jmeno:     document.getElementById('jmeno').value.trim(),
       prijmeni:  document.getElementById('prijmeni').value.trim(),
       datum:     datumVal,
-      pohlavi:   document.getElementById('pohlavi').value,
+      pohlavi:   (() => {
+        const pk = getPohlaviKeyCS(pohlaviVal);
+        return pk === 'muz' ? 'Muž' : pk === 'zena' ? 'Žena' : 'Neuvedeno';
+      })(),
       email:     document.getElementById('email').value.trim(),
       trat:      tratVybrana ? tratVybrana.value : '',
-      kategorie: spocitejKategorii(datumVal),
+      kategorie: spocitejKategoriiCS(datumVal, pohlaviVal),
       klub:      document.getElementById('klub').value.trim(),
       gdpr:      document.getElementById('gdpr').checked ? 'Ano' : 'Ne',
       foto:      document.getElementById('foto').checked ? 'Ano' : 'Ne',
@@ -475,11 +531,9 @@
       });
       document.getElementById('formScreen').style.display = 'none';
 
-      // 🥚 Easter egg — detekce speciálních jmen
-      const jm = document.getElementById('jmeno').value.trim().toLowerCase();
-      const pj = document.getElementById('prijmeni').value.trim().toLowerCase();
+      // Easter egg — detekce speciálních jmen
       const normalize = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-      const nj = normalize(jm), np = normalize(pj);
+      const nj = normalize(data.jmeno), np = normalize(data.prijmeni);
 
       const easterEgg = (() => {
         if (np === 'cerny' && (nj === 'vojtech' || nj === 'vojta')) return 'eo';
@@ -494,14 +548,13 @@
         ar: { h: '!تم قبول التسجيل', p: '.تم حفظ بياناتك. نراك في السباق 🏃', nova: 'تسجيل جديد ←', rtl: true },
       };
 
-      if (easterEgg && uspechTexty[easterEgg]) {
+      if (easterEgg) {
         const e = uspechTexty[easterEgg];
         document.querySelector('.success-screen h2').textContent = e.h;
         document.querySelector('.success-screen p').textContent = e.p;
         document.querySelector('.btn-outline').textContent = e.nova;
         if (e.rtl) document.getElementById('successScreen').setAttribute('dir', 'rtl');
       } else {
-        const t = preklady[jazyk];
         document.querySelector('.success-screen h2').textContent = t.uspechH;
         document.querySelector('.success-screen p').textContent = t.uspechP;
         document.querySelector('.btn-outline').textContent = t.nova;
@@ -525,6 +578,10 @@
     document.getElementById('f-kategorie-display').style.display = 'none';
     const btn = document.getElementById('submitBtn');
     btn.disabled = false;
+    btn.style.position = '';
+    btn.style.width = '';
+    btn.style.left = '';
+    btn.style.top = '';
     document.getElementById('btnText').textContent = preklady[jazyk].odeslat;
     document.getElementById('spinner').style.display = 'none';
     document.getElementById('formScreen').style.display = 'block';
@@ -538,7 +595,6 @@
 
     btn.addEventListener('mouseenter', function() {
       if (running) return;
-      // Ověř zda je formulář validní — pokud ano, nechej tlačítko být
       const jmeno = document.getElementById('jmeno').value.trim();
       const prijmeni = document.getElementById('prijmeni').value.trim();
       const datum = document.getElementById('datum').value;
@@ -549,8 +605,8 @@
       const foto = document.getElementById('foto').checked;
       const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
       const vsePlyni = jmeno && prijmeni && datum && pohlavi && emailOk && trat && gdpr && foto;
+
       if (!vsePlyni) {
-        // Formulář nevyplněn — vrať tlačítko na místo a nech ho stát
         btn.style.position = '';
         btn.style.width = '';
         btn.style.left = '';
@@ -565,15 +621,11 @@
 
       const maxX = cardRect.width - btnRect.width - 4;
       const maxY = cardRect.height - btnRect.height - 4;
-
-      // Relativní pozice tlačítka vůči cardu
       const relX = btnRect.left - cardRect.left;
       const relY = btnRect.top - cardRect.top;
 
-      // Náhodný nový cíl — nikam mimo card
       let nx = Math.random() * maxX;
       let ny = Math.random() * maxY;
-      // Zajisti aby neutekl příliš blízko aktuální pozice
       if (Math.abs(nx - relX) < 80) nx = (nx + 120) % maxX;
       if (Math.abs(ny - relY) < 40) ny = (ny + 80) % maxY;
 
@@ -582,8 +634,6 @@
       btn.style.left = nx + 'px';
       btn.style.top = ny + 'px';
       btn.style.transition = '';
-
-      // Ujisti se že card má position relative
       card.style.position = 'relative';
 
       setTimeout(() => { running = false; }, 850);
