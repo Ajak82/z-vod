@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <title>Registrace na běžecký závod</title>
+  <title>Registrace na svatební běh</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -128,7 +128,7 @@
 <div class="card">
   <div id="formScreen">
     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem;">
-      <h1 id="nadpis">Registrace na svatební závod</h1>
+      <h1 id="nadpis">Registrace na svatební běh</h1>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:3px; background:#f5f5f3; border-radius:10px; padding:3px;">
         <button onclick="setJazyk('cs')" id="btn-cs" style="border:none; border-radius:7px; padding:5px 10px; font-size:11px; font-weight:700; cursor:pointer; background:#1a1a1a; color:#fff; font-family:inherit; line-height:1;">CZ</button>
         <button onclick="setJazyk('sk')" id="btn-sk" style="border:none; border-radius:7px; padding:5px 10px; font-size:11px; font-weight:700; cursor:pointer; background:transparent; color:#888; font-family:inherit; line-height:1;">SK</button>
@@ -236,8 +236,10 @@
 
   <div class="success-screen" id="successScreen">
     <div class="checkmark">✓</div>
-    <h2>Registrace přijata!</h2>
-    <p>Data byla uložena.<br>Potvrzení ti přijde na e-mail.</p>
+    <h2 >Registrace přijata!</h2>
+    <h5 style="font-weight: 400; margin-bottom: 10px;">Zkontroluj si svou přihlášku zde  www.XXXXXXXXXX.com</h5>
+    <p>Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta</p>
+
     <button class="btn-outline" onclick="resetForm()">← Nová registrace</button>
   </div>
 </div>
@@ -288,7 +290,7 @@
       fotoText: 'Souhlasím s pořízením a zveřejněním fotografií ze závodu',
       errFoto: 'Souhlas je povinný',
       odeslat: 'Odeslat registraci', odesilam: 'Odesílám…',
-      uspechH: 'Registrace přijata!', uspechP: 'Data byla uložena.',
+      uspechH: 'Registrace přijata!', uspechHH: 'Zkontroluj si svou přihlášku zde  www.XXXXXXXXXX.com', uspechP: 'Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta',
       nova: '← Nová registrace',
       errPovinne: 'Povinné pole', errEmail: 'Zadej platný e-mail',
     },
@@ -309,7 +311,7 @@
       fotoText: 'Súhlasím s vyhotovením a zverejnením fotografií zo závodu',
       errFoto: 'Súhlas je povinný',
       odeslat: 'Odoslať registráciu', odesilam: 'Odosielam…',
-      uspechH: 'Registrácia prijatá!', uspechP: 'Dáta boli uložené.',
+      uspechH: 'Registrácia prijatá!', uspechHH: 'Skontroluj si svoju prihlášku tu www.XXXXXXXXXX.com',  uspechP: 'Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta',
       nova: '← Nová registrácia',
       errPovinne: 'Povinné pole', errEmail: 'Zadaj platný e-mail',
     },
@@ -330,7 +332,7 @@
       fotoText: 'Wyrażam zgodę na wykonanie i publikację zdjęć z zawodów',
       errFoto: 'Zgoda jest wymagana',
       odeslat: 'Wyślij rejestrację', odesilam: 'Wysyłam…',
-      uspechH: 'Rejestracja przyjęta!', uspechP: 'Dane zostały zapisane.',
+      uspechH: 'Rejestracja przyjęta!', uspechHH: 'Sprawdź swoją aplikację tutaj www.XXXXXXXXX.com', uspechP: 'Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta',
       nova: '← Nowa rejestracja',
       errPovinne: 'Pole wymagane', errEmail: 'Podaj prawidłowy e-mail',
     },
@@ -351,7 +353,7 @@
       fotoText: 'I consent to photos being taken and published from the event',
       errFoto: 'Consent is required',
       odeslat: 'Submit registration', odesilam: 'Submitting…',
-      uspechH: 'Registration received!', uspechP: 'Your data has been saved.',
+      uspechH: 'Registration received!', uspechHH: 'Check your application here www.XXXXXXXXXX.com', uspechP: 'Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta',
       nova: '← New registration',
       errPovinne: 'Required field', errEmail: 'Enter a valid e-mail',
     }
@@ -384,7 +386,7 @@
     document.getElementById('err-foto').textContent = t.errFoto;
     document.getElementById('btnText').textContent = t.odeslat;
     document.querySelector('.success-screen h2').textContent = t.uspechH;
-    document.querySelector('.success-screen p').textContent = t.uspechP;
+    document.querySelector('.success-screen h5').textContent = t.uspechHH;
     document.querySelector('.btn-outline').textContent = t.nova;
     document.querySelectorAll('#f-jmeno .error-msg, #f-prijmeni .error-msg, #f-datum .error-msg, #f-pohlavi .error-msg').forEach(e => e.textContent = t.errPovinne);
     document.querySelector('#f-email .error-msg').textContent = t.errEmail;
