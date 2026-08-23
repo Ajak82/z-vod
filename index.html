@@ -140,12 +140,12 @@
     <div class="row">
       <div class="field" id="f-jmeno">
         <label for="jmeno">Jméno</label>
-        <input type="text" id="jmeno" placeholder="Jan">
+        <input type="text" id="jmeno" placeholder="Petr">
         <span class="error-msg">Povinné pole</span>
       </div>
       <div class="field" id="f-prijmeni">
         <label for="prijmeni">Příjmení</label>
-        <input type="text" id="prijmeni" placeholder="Novák">
+        <input type="text" id="prijmeni" placeholder="Pavel">
         <span class="error-msg">Povinné pole</span>
       </div>
     </div>
@@ -168,7 +168,7 @@
     </div>
     <div class="field" id="f-email">
       <label for="email">E-mail</label>
-      <input type="email" id="email" placeholder="jan@example.com">
+      <input type="email" id="email" placeholder="zuzana.caputova@gmail.com">
       <span class="error-msg">Zadej platný e-mail</span>
     </div>
 
@@ -409,9 +409,9 @@
     return vek;
   }
 
-  // Pro tabulku — vždy česky
+  //table
   const katCS = {
-    muz:      ['Do 18 let – Muži (Junior)', '19–39 let – Muži', '40–49 let – Muži (Masters)', '50–59 let – Muži (Veterans)', '60+ let – Muži (Super veterans)'],
+    muz:      ['Do 18 let – Muži (Junior)', '19–39 let – Muži', '40–49 let – Muži (Masters)', '50–59 let – Muži (Geronti)', '60+ let – Muži (Super veterans)'],
     zena:     ['Do 18 let – Ženy (Junior)', '19–39 let – Ženy', '40–49 let – Ženy (Masters)', '50–59 let – Ženy (Veterans)', '60+ let – Ženy (Super veterans)'],
     neuvedeno:['Do 18 let (Junior)', '19–39 let', '40–49 let (Masters)', '50–59 let (Veterans)', '60+ let (Super veterans)'],
   };
@@ -546,19 +546,38 @@
       })();
 
       const uspechTexty = {
-        eo: { h: 'Registriĝo akceptita!', p: 'Viaj datumoj estis konservitaj. Ĝis la konkurso! 🏃', nova: '← Nova registriĝo' },
-        fr: { h: 'Inscription reçue !', p: 'Vos données ont été enregistrées. À bientôt sur la ligne de départ ! 🥂', nova: '← Nouvelle inscription' },
-        ar: { h: '!تم قبول التسجيل', p: '.تم حفظ بياناتك. نراك في السباق 🏃', nova: 'تسجيل جديد ←', rtl: true },
+        eo: {
+          h: 'Registriĝo akceptita!',
+          h5: 'Kontrolu vian registraĵon ĉi tie www.XXXXXXXXXXX.com',
+          p: 'HUsa eo CS text',
+          nova: '← Nova registriĝo'
+        },
+        fr: {
+          h: 'Inscription reçue !',
+          h5: 'Vérifiez votre inscription ici www.XXXXXXXXXXX.com',
+          p: 'HUsa fr CS text',
+          nova: '← Nouvelle inscription'
+        },
+        ar: {
+          h: '!تم قبول التسجيل',
+          h5: 'تحقق من تسجيلك هنا www.XXXXXXXXXXX.com',
+          p: 'HUsa ar CS text',
+          nova: 'تسجيل جديد ←',
+          rtl: true
+        },
       };
 
       if (easterEgg) {
         const e = uspechTexty[easterEgg];
         document.querySelector('.success-screen h2').textContent = e.h;
+        document.querySelector('.success-screen h5').textContent = e.h5;
         document.querySelector('.success-screen p').textContent = e.p;
         document.querySelector('.btn-outline').textContent = e.nova;
         if (e.rtl) document.getElementById('successScreen').setAttribute('dir', 'rtl');
+        else document.getElementById('successScreen').removeAttribute('dir');
       } else {
         document.querySelector('.success-screen h2').textContent = t.uspechH;
+        document.querySelector('.success-screen h5').textContent = t.uspechHH;
         document.querySelector('.success-screen p').textContent = t.uspechP;
         document.querySelector('.btn-outline').textContent = t.nova;
         document.getElementById('successScreen').removeAttribute('dir');
@@ -639,7 +658,7 @@
       btn.style.transition = '';
       card.style.position = 'relative';
 
-      setTimeout(() => { running = false; }, 850);
+      setTimeout(() => { running = false; }, 420);
     });
   })();
 </script>
