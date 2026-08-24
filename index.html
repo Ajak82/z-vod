@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="faviconV2.svg">
   <title>Registrace na svatební běh</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -234,11 +234,11 @@
     </button>
   </div>
 
-  <div class="success-screen" id="successScreen">
+  <div class="success-screen" id="successScresen">
     <div class="checkmark">✓</div>
-    <h2 >Registrace přijata!</h2>
-    <h5 style="font-weight: 400; margin-bottom: 10px;">Zkontroluj si svou přihlášku zde  www.XXXXXXXXXX.com</h5>
-    <p>Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta</p>
+    <h2 style="margin-bottom: 10px;">Registrace přijata!</h2>
+    <a href="https://docs.google.com/spreadsheets/d/1jgW6VBr_C2E_ImQpuW0ngNO43bzZo0_tkKZsuUfHINo/edit?usp=sharing" target="_blank" style="font-weight: 500; color: #4a4a4a; font-size: 90%;">Zkontroluj si svou přihlášku zde</a>
+    <p style="margin-top: 30px;">Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta</p>
 
     <button class="btn-outline" onclick="resetForm()">← Nová registrace</button>
   </div>
@@ -386,7 +386,7 @@
     document.getElementById('err-foto').textContent = t.errFoto;
     document.getElementById('btnText').textContent = t.odeslat;
     document.querySelector('.success-screen h2').textContent = t.uspechH;
-    document.querySelector('.success-screen h5').textContent = t.uspechHH;
+    document.querySelector('.success-screen a').textContent = t.uspechHH;
     document.querySelector('.btn-outline').textContent = t.nova;
     document.querySelectorAll('#f-jmeno .error-msg, #f-prijmeni .error-msg, #f-datum .error-msg, #f-pohlavi .error-msg').forEach(e => e.textContent = t.errPovinne);
     document.querySelector('#f-email .error-msg').textContent = t.errEmail;
@@ -548,19 +548,19 @@
       const uspechTexty = {
         eo: {
           h: 'Registriĝo akceptita!',
-          h5: 'Kontrolu vian registraĵon ĉi tie www.XXXXXXXXXXX.com',
+          a: 'Kontrolu vian registraĵon ĉi tie www.XXXXXXXXXXX.com',
           p: 'HUsa eo CS text',
           nova: '← Nova registriĝo'
         },
         fr: {
           h: 'Inscription reçue !',
-          h5: 'Vérifiez votre inscription ici www.XXXXXXXXXXX.com',
+          a: 'Vérifiez votre inscription ici www.XXXXXXXXXXX.com',
           p: 'HUsa fr CS text',
           nova: '← Nouvelle inscription'
         },
         ar: {
           h: '!تم قبول التسجيل',
-          h5: 'تحقق من تسجيلك هنا www.XXXXXXXXXXX.com',
+          a: 'تحقق من تسجيلك هنا www.XXXXXXXXXXX.com',
           p: 'HUsa ar CS text',
           nova: 'تسجيل جديد ←',
           rtl: true
@@ -570,14 +570,14 @@
       if (easterEgg) {
         const e = uspechTexty[easterEgg];
         document.querySelector('.success-screen h2').textContent = e.h;
-        document.querySelector('.success-screen h5').textContent = e.h5;
+        document.querySelector('.success-screen a').textContent = e.h5;
         document.querySelector('.success-screen p').textContent = e.p;
         document.querySelector('.btn-outline').textContent = e.nova;
         if (e.rtl) document.getElementById('successScreen').setAttribute('dir', 'rtl');
         else document.getElementById('successScreen').removeAttribute('dir');
       } else {
         document.querySelector('.success-screen h2').textContent = t.uspechH;
-        document.querySelector('.success-screen h5').textContent = t.uspechHH;
+        document.querySelector('.success-screen a').textContent = t.uspechHH;
         document.querySelector('.success-screen p').textContent = t.uspechP;
         document.querySelector('.btn-outline').textContent = t.nova;
         document.getElementById('successScreen').removeAttribute('dir');
@@ -585,7 +585,7 @@
 
       document.getElementById('successScreen').style.display = 'block';
     } catch (err) {
-      alert('Chyba při odesílání. Zkontroluj URL skriptu.');
+      alert('Chyba při odesílání. Napiš správci.');
       btn.disabled = false;
       document.getElementById('btnText').textContent = t.odeslat;
       document.getElementById('spinner').style.display = 'none';
@@ -658,7 +658,7 @@
       btn.style.transition = '';
       card.style.position = 'relative';
 
-      setTimeout(() => { running = false; }, 420);
+      setTimeout(() => { running = false; }, 10000);
     });
   })();
 </script>
