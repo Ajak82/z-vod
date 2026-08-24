@@ -234,10 +234,10 @@
     </button>
   </div>
 
-  <div class="success-screen" id="successScresen">
+  <div id="successScreen" class="success-screen">
     <div class="checkmark">✓</div>
     <h2 style="margin-bottom: 10px;">Registrace přijata!</h2>
-    <a href="https://docs.google.com/spreadsheets/d/1jgW6VBr_C2E_ImQpuW0ngNO43bzZo0_tkKZsuUfHINo/edit?usp=sharing" target="_blank" style="font-weight: 500; color: #4a4a4a; font-size: 90%;">Zkontroluj si svou přihlášku zde</a>
+    <a href="https://docs.google.com/spreadsheets/d/1jgW6VBr_C2E_ImQpuW0ngNO43bzZo0_tkKZsuUfHINo/edit?gid=1557061133#gid=1557061133" target="_blank" style="font-weight: 500; color: #4a4a4a; font-size: 90%;">Zkontroluj si svou přihlášku zde</a>
     <p style="margin-top: 30px;">Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta</p>
 
     <button class="btn-outline" onclick="resetForm()">← Nová registrace</button>
@@ -245,7 +245,7 @@
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz6Z6m-HRAHuHn46qjHrIbQrnXffZtRSIlv1eox3Oi_yRzn97Z3YZ6p1WOEccTcxvXp/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbypqXNrEkgjcCNAUgdbpsQqKARwpGgtrbxBqouqmefxkzKEaLCIYjYitppA-rxOdbQG/exec";
 
   // Kategorie rozdělené podle pohlaví
   const kategorie = {
@@ -526,70 +526,49 @@
       foto:      document.getElementById('foto').checked ? 'Ano' : 'Ne',
     };
 
-    try {
-      await fetch(SCRIPT_URL, {
-        method: 'POST', mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      document.getElementById('formScreen').style.display = 'none';
+           fetch(SCRIPT_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
 
-      // Easter egg — detekce speciálních jmen
-      const normalize = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-      const nj = normalize(data.jmeno), np = normalize(data.prijmeni);
+    await new Promise(resolve => setTimeout(resolve, 800));
 
-      const easterEgg = (() => {
-        if (np === 'cerny' && (nj === 'vojtech' || nj === 'vojta')) return 'eo';
-        if (np === 'cerny' && (nj === 'michal' || nj === 'misa')) return 'fr';
-        if (np === 'jaros' && nj === 'adam') return 'ar';
-        return null;
-      })();
+    document.getElementById('formScreen').style.display = 'none';
 
-      const uspechTexty = {
-        eo: {
-          h: 'Registriĝo akceptita!',
-          a: 'Kontrolu vian registraĵon ĉi tie www.XXXXXXXXXXX.com',
-          p: 'HUsa eo CS text',
-          nova: '← Nova registriĝo'
-        },
-        fr: {
-          h: 'Inscription reçue !',
-          a: 'Vérifiez votre inscription ici www.XXXXXXXXXXX.com',
-          p: 'HUsa fr CS text',
-          nova: '← Nouvelle inscription'
-        },
-        ar: {
-          h: '!تم قبول التسجيل',
-          a: 'تحقق من تسجيلك هنا www.XXXXXXXXXXX.com',
-          p: 'HUsa ar CS text',
-          nova: 'تسجيل جديد ←',
-          rtl: true
-        },
-      };
+    const normalize = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const nj = normalize(data.jmeno), np = normalize(data.prijmeni);
 
-      if (easterEgg) {
-        const e = uspechTexty[easterEgg];
-        document.querySelector('.success-screen h2').textContent = e.h;
-        document.querySelector('.success-screen a').textContent = e.h5;
-        document.querySelector('.success-screen p').textContent = e.p;
-        document.querySelector('.btn-outline').textContent = e.nova;
-        if (e.rtl) document.getElementById('successScreen').setAttribute('dir', 'rtl');
-        else document.getElementById('successScreen').removeAttribute('dir');
-      } else {
-        document.querySelector('.success-screen h2').textContent = t.uspechH;
-        document.querySelector('.success-screen a').textContent = t.uspechHH;
-        document.querySelector('.success-screen p').textContent = t.uspechP;
-        document.querySelector('.btn-outline').textContent = t.nova;
-        document.getElementById('successScreen').removeAttribute('dir');
-      }
+    const easterEgg = (() => {
+      if (np === 'cerny' && (nj === 'vojtech' || nj === 'vojta')) return 'eo';
+      if (np === 'cerny' && (nj === 'michal' || nj === 'misa')) return 'fr';
+      if (np === 'jaros' && nj === 'adam') return 'ar';
+      return null;
+    })();
 
-      document.getElementById('successScreen').style.display = 'block';
-    } catch (err) {
-      alert('Chyba při odesílání. Napiš správci.');
-      btn.disabled = false;
-      document.getElementById('btnText').textContent = t.odeslat;
-      document.getElementById('spinner').style.display = 'none';
+    const uspechTexty = {
+      eo: { h: 'Registriĝo akceptita!', a: 'Kontrolu vian registraĵon ĉi tie', p: 'HUsa eo CS text', nova: '← Nova registriĝo' },
+      fr: { h: 'Inscription reçue !', a: 'Vérifiez votre inscription ici', p: 'HUsa fr CS text', nova: '← Nouvelle inscription' },
+      ar: { h: '!تم قبول التسجيل', a: 'تحقق من تسجيلك هنا', p: 'HUsa ar CS text', nova: 'تسجيل جديد ←', rtl: true },
+    };
+
+    if (easterEgg) {
+      const e = uspechTexty[easterEgg];
+      document.querySelector('.success-screen h2').textContent = e.h;
+      document.querySelector('.success-screen a').textContent = e.a;
+      document.querySelector('.success-screen p').textContent = e.p;
+      document.querySelector('.btn-outline').textContent = e.nova;
+      if (e.rtl) document.getElementById('successScreen').setAttribute('dir', 'rtl');
+      else document.getElementById('successScreen').removeAttribute('dir');
+    } else {
+      document.querySelector('.success-screen h2').textContent = t.uspechH;
+      document.querySelector('.success-screen a').textContent = t.uspechHH;
+      document.querySelector('.success-screen p').textContent = t.uspechP;
+      document.querySelector('.btn-outline').textContent = t.nova;
+      document.getElementById('successScreen').removeAttribute('dir');
     }
+
+    document.getElementById('successScreen').style.display = 'block';
   }
 
   function resetForm() {
@@ -658,7 +637,7 @@
       btn.style.transition = '';
       card.style.position = 'relative';
 
-      setTimeout(() => { running = false; }, 10000);
+      setTimeout(() => { running = false; }, 450);
     });
   })();
 </script>
