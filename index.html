@@ -127,6 +127,7 @@
 <body>
 <div class="card">
   <div id="formScreen">
+    
     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem;">
       <h1 id="nadpis">Registrace na svatební běh</h1>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:3px; background:#f5f5f3; border-radius:10px; padding:3px;">
@@ -205,10 +206,26 @@
       "></div>
     </div>
 
-    <div class="field" id="f-klub">
-      <label for="klub">Klub / oddíl <span class="optional">nepovinné</span></label>
-      <input type="text" id="klub" placeholder="např. SK Satalice">
+    <div class="row">
+
+      <div class="field" id="f-klub">
+        <label for="klub">Klub / oddíl <span class="optional">nepovinné</span></label>
+        <input type="text" id="klub" placeholder="např. SK Satalice">
+      </div>
+
+      <div class="field" id="f-team">
+          <label for="team">Tým</label>
+          <select id="team">
+            <option value="">— Vyber —</option>
+            <option>Ženich</option>
+            <option>Nevěsta</option>
+            <option>Oba</option>
+          </select>
+          <span class="error-msg">Povinné pole</span>
+      </div>
+
     </div>
+
     <div class="field">
       <div class="checkbox-field" id="cb-gdpr">
         <input type="checkbox" id="gdpr">
@@ -218,6 +235,7 @@
         </div>
       </div>
     </div>
+
     <div class="field">
       <div class="checkbox-field" id="cb-foto">
         <input type="checkbox" id="foto">
@@ -245,7 +263,7 @@
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxfmUuG1KjPi8ehgn8sVEbmY3eWBynjlqWytU2ECYS87N67zaAwDN5H4-cnBh18QFqt/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxNlvbMX0T1ARmcAipGaPe06JpOz65gkFpGh7dXLHTBxlDCFygL4tFoB2qtoXsrRACD/exec";
 
   // Kategorie rozdělené podle pohlaví
   const kategorie = {
@@ -285,6 +303,9 @@
       errDisciplina: 'Vyber disciplínu',
       vekovaKat: 'Věková kategorie',
       klub: 'Klub / oddíl', klubOpt: 'nepovinné',
+      team: 'Tým',
+      teamVolby: ['— Vyber —', 'Ženich', 'Nevěsta', 'Oba'],
+      errTeam: 'Povinné pole',
       gdprText: 'Souhlasím se zpracováním osobních údajů dle GDPR',
       errGdpr: 'Souhlas je povinný',
       fotoText: 'Souhlasím s pořízením a zveřejněním fotografií ze závodu',
@@ -306,6 +327,9 @@
       errDisciplina: 'Vyber disciplínu',
       vekovaKat: 'Veková kategória',
       klub: 'Klub / oddiel', klubOpt: 'nepovinné',
+      team: 'Tím',
+      teamVolby: ['— Vyber —', 'Ženích', 'Nevesta', 'Obaja'],
+      errTeam: 'Povinné pole',
       gdprText: 'Súhlasím so spracovaním osobných údajov podľa GDPR',
       errGdpr: 'Súhlas je povinný',
       fotoText: 'Súhlasím s vyhotovením a zverejnením fotografií zo závodu',
@@ -327,6 +351,9 @@
       errDisciplina: 'Wybierz dyscyplinę',
       vekovaKat: 'Kategoria wiekowa',
       klub: 'Klub / sekcja', klubOpt: 'opcjonalne',
+      team: 'Drużyna',
+      teamVolby: ['— Wybierz —', 'Pan młody', 'Panna młoda', 'Obydwoje'],
+      errTeam: 'Pole wymagane',
       gdprText: 'Wyrażam zgodę na przetwarzanie danych osobowych zgodnie z RODO',
       errGdpr: 'Zgoda jest wymagana',
       fotoText: 'Wyrażam zgodę na wykonanie i publikację zdjęć z zawodów',
@@ -348,6 +375,9 @@
       errDisciplina: 'Please select a discipline',
       vekovaKat: 'Age category',
       klub: 'Club / team', klubOpt: 'optional',
+      team: 'Team',
+      teamVolby: ['— Select —', 'Groom', 'Bride', 'Both'],
+      errTeam: 'Required field',
       gdprText: 'I consent to the processing of my personal data under GDPR',
       errGdpr: 'Consent is required',
       fotoText: 'I consent to photos being taken and published from the event',
@@ -380,6 +410,9 @@
     document.querySelector('#f-trat .error-msg').textContent = t.errDisciplina;
     document.getElementById('label-kategorie').textContent = t.vekovaKat;
     document.querySelector('label[for="klub"]').firstChild.textContent = t.klub + ' ';
+    document.querySelector('label[for="team"]').textContent = t.team;
+    const teamOpts = document.querySelectorAll('#team option');
+    t.teamVolby.forEach((v, i) => { if (teamOpts[i]) teamOpts[i].textContent = v; });
     document.getElementById('label-gdpr').innerHTML = t.gdprText + ' <span style="color:#e53e3e">*</span>';
     document.getElementById('err-gdpr').textContent = t.errGdpr;
     document.getElementById('label-foto').innerHTML = t.fotoText + ' <span style="color:#e53e3e">*</span>';
@@ -487,6 +520,10 @@ function aktualizujKategorii() {
       else el.classList.remove('invalid');
     });
 
+    const teamEl = document.getElementById('f-team');
+    if (!document.getElementById('team').value) { teamEl.classList.add('invalid'); ok = false; }
+    else teamEl.classList.remove('invalid');
+
     const tratEl = document.getElementById('f-trat');
     if (!document.querySelector('input[name="trat"]:checked')) { tratEl.classList.add('invalid'); ok = false; }
     else tratEl.classList.remove('invalid');
@@ -526,6 +563,7 @@ function aktualizujKategorii() {
       trat:      tratVybrana ? tratVybrana.value : '',
       kategorie: spocitejKategoriiCS(datumVal, pohlaviVal, document.getElementById('jmeno').value.trim(), document.getElementById('prijmeni').value.trim()),
       klub:      document.getElementById('klub').value.trim(),
+      team:      document.getElementById('team').value,
       gdpr:      document.getElementById('gdpr').checked ? 'Ano' : 'Ne',
       foto:      document.getElementById('foto').checked ? 'Ano' : 'Ne',
     };
@@ -580,6 +618,7 @@ function aktualizujKategorii() {
     document.querySelectorAll('select').forEach(s => s.value = '');
     document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(c => c.checked = false);
     document.querySelectorAll('.field, .checkbox-field').forEach(f => f.classList.remove('invalid'));
+    document.getElementById('team').value = '';
     document.getElementById('f-kategorie-display').style.display = 'none';
     const btn = document.getElementById('submitBtn');
     btn.disabled = false;
