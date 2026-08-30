@@ -130,10 +130,10 @@
     
     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem;">
       <h1 id="nadpis">Registrace na svatební běh</h1>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:3px; background:#f5f5f3; border-radius:10px; padding:3px;">
+      <div style=" gap:2px; background:#f5f5f3; border-radius:10px; padding:3px;">
         <button onclick="setJazyk('cs')" id="btn-cs" style="border:none; border-radius:7px; padding:5px 10px; font-size:11px; font-weight:700; cursor:pointer; background:#1a1a1a; color:#fff; font-family:inherit; line-height:1;">CZ</button>
         <button onclick="setJazyk('sk')" id="btn-sk" style="border:none; border-radius:7px; padding:5px 10px; font-size:11px; font-weight:700; cursor:pointer; background:transparent; color:#888; font-family:inherit; line-height:1;">SK</button>
-        <button onclick="setJazyk('pl')" id="btn-pl" style="border:none; border-radius:7px; padding:5px 10px; font-size:11px; font-weight:700; cursor:pointer; background:transparent; color:#888; font-family:inherit; line-height:1;">PL</button>
+        <button onclick="setJazyk('pl')" id="btn-pl" style="border:none; border-radius:7px; padding:5px 10px; font-size:11px; font-weight:700; cursor:pointer; background:transparent; color:#888; font-family:inherit; line-height:1; display: none;">FR</button>
         <button onclick="setJazyk('en')" id="btn-en" style="border:none; border-radius:7px; padding:5px 10px; font-size:11px; font-weight:700; cursor:pointer; background:transparent; color:#888; font-family:inherit; line-height:1;">EN</button>
       </div>
     </div>
@@ -181,7 +181,7 @@
           <label for="trat-beh">
             <span class="icon">🏃</span>
             <span class="nazev">Běh 8 km</span>
-            <span class="popis">Trasa lesem a polem</span>
+            <span class="popis">Trasa kolem Vodného Diela</span>
           </label>
         </div>
         <div class="trat-option">
@@ -210,7 +210,7 @@
 
       <div class="field" id="f-klub">
         <label for="klub">Klub / oddíl <span class="optional">nepovinné</span></label>
-        <input type="text" id="klub" placeholder="např. SK Satalice">
+        <input type="text" id="klub" placeholder="SK Satalice">
       </div>
 
       <div class="field" id="f-team">
@@ -230,8 +230,7 @@
       <div class="checkbox-field" id="cb-gdpr">
         <input type="checkbox" id="gdpr">
         <div class="checkbox-wrap">
-          <label for="gdpr" id="label-gdpr">Souhlasím se zpracováním osobních údajů dle GDPR <span style="color:#e53e3e">*</span></label>
-          <span class="error-msg" id="err-gdpr">Souhlas je povinný</span>
+          <label for="gdpr" id="label-gdpr">Souhlasím se zpracováním osobních údajů dle GDPR</label>
         </div>
       </div>
     </div>
@@ -255,15 +254,16 @@
   <div id="successScreen" class="success-screen">
     <div class="checkmark">✓</div>
     <h2 style="margin-bottom: 10px;">Registrace přijata!</h2>
-    <a href="https://docs.google.com/spreadsheets/d/1jgW6VBr_C2E_ImQpuW0ngNO43bzZo0_tkKZsuUfHINo/edit?gid=1557061133#gid=1557061133" target="_blank" style="font-weight: 500; color: #4a4a4a; font-size: 90%;">Zkontroluj si svou přihlášku zde</a>
-    <p style="margin-top: 30px;">Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta</p>
+    <a href="https://docs.google.com/spreadsheets/d/1jgW6VBr_C2E_ImQpuW0ngNO43bzZo0_tkKZsuUfHINo/edit?usp=sharing" target="_blank" style="font-weight: 500; color: #4a4a4a; font-size: 90%;">Zkontroluj si svou přihlášku zde</a>
+    <p style="margin-top: 20px; line-height: 1.4;">Děkujeme za vaši registraci. <br> Jsme rádi že s námi poběžíte a nebo posedíte.</p>
+    
 
     <button class="btn-outline" onclick="resetForm()">← Nová registrace</button>
   </div>
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxNlvbMX0T1ARmcAipGaPe06JpOz65gkFpGh7dXLHTBxlDCFygL4tFoB2qtoXsrRACD/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxejmVRGd-9DbGSHHb1Tseo9Noc2DLN4_dmHFONiA-RptWhhE5yVg6g9-_EOAc9OjTJ/exec";
 
   // Kategorie rozdělené podle pohlaví
   const kategorie = {
@@ -298,7 +298,7 @@
       pohlaviVolby: ['— Vyber —', 'Muž', 'Žena', 'Neuvedeno'],
       email: 'E-mail',
       disciplina: 'Vyber svou disciplínu',
-      behNazev: 'Běh 8 km', behPopis: 'Trasa lesem a polem',
+      behNazev: 'Běh 8 km', behPopis: 'Trasa kolem Vodného Diela',
       proseccoNazev: 'Prosecco', proseccoPopis: 'Pro ty ostatní',
       errDisciplina: 'Vyber disciplínu',
       vekovaKat: 'Věková kategorie',
@@ -311,7 +311,7 @@
       fotoText: 'Souhlasím s pořízením a zveřejněním fotografií ze závodu',
       errFoto: 'Souhlas je povinný',
       odeslat: 'Odeslat registraci', odesilam: 'Odesílám…',
-      uspechH: 'Registrace přijata!', uspechHH: 'Zkontroluj si svou přihlášku zde', uspechP: 'Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta',
+      uspechH: 'Registrace přijata!', uspechHH: 'Zkontroluj si svou přihlášku zde', uspechP: 'Děkujeme za vaši registraci. Jsme rádi že s námi poběžíte a nebo posedíte.',
       nova: '← Nová registrace',
       errPovinne: 'Povinné pole', errEmail: 'Zadej platný e-mail',
     },
@@ -322,7 +322,7 @@
       pohlaviVolby: ['— Vyber —', 'Muž', 'Žena', 'Neuvedené'],
       email: 'E-mail',
       disciplina: 'Vyber svoju disciplínu',
-      behNazev: 'Beh 8 km', behPopis: 'Trasa lesom a poľom',
+      behNazev: 'Beh 8 km', behPopis: 'Trasa okolo Vodného Diela',
       proseccoNazev: 'Prosecco', proseccoPopis: 'Pre tých ostatných',
       errDisciplina: 'Vyber disciplínu',
       vekovaKat: 'Veková kategória',
@@ -335,34 +335,34 @@
       fotoText: 'Súhlasím s vyhotovením a zverejnením fotografií zo závodu',
       errFoto: 'Súhlas je povinný',
       odeslat: 'Odoslať registráciu', odesilam: 'Odosielam…',
-      uspechH: 'Registrácia prijatá!', uspechHH: 'Skontroluj si svoju prihlášku tu',  uspechP: 'Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta',
+      uspechH: 'Registrácia prijatá!', uspechHH: 'Skontroluj si svoju prihlášku tu',  uspechP: 'Ďakujeme za vašu registráciu. Sme radi že s nami pobežíte alebo posedíte.',
       nova: '← Nová registrácia',
       errPovinne: 'Povinné pole', errEmail: 'Zadaj platný e-mail',
     },
-    pl: {
-      nadpis: 'Rejestracja na bieg weselny',
-      jmeno: 'Imię', prijmeni: 'Nazwisko',
-      datum: 'Data urodzenia', pohlavi: 'Płeć',
-      pohlaviVolby: ['— Wybierz —', 'Mężczyzna', 'Kobieta', 'Nie podano'],
-      email: 'E-mail',
-      disciplina: 'Wybierz swoją dyscyplinę',
-      behNazev: 'Bieg 8 km', behPopis: 'Trasa przez las i pola',
-      proseccoNazev: 'Prosecco', proseccoPopis: 'Dla pozostałych',
-      errDisciplina: 'Wybierz dyscyplinę',
-      vekovaKat: 'Kategoria wiekowa',
-      klub: 'Klub / sekcja', klubOpt: 'opcjonalne',
-      team: 'Drużyna',
-      teamVolby: ['— Wybierz —', 'Pan młody', 'Panna młoda', 'Obydwoje'],
-      errTeam: 'Pole wymagane',
-      gdprText: 'Wyrażam zgodę na przetwarzanie danych osobowych zgodnie z RODO',
-      errGdpr: 'Zgoda jest wymagana',
-      fotoText: 'Wyrażam zgodę na wykonanie i publikację zdjęć z zawodów',
-      errFoto: 'Zgoda jest wymagana',
-      odeslat: 'Wyślij rejestrację', odesilam: 'Wysyłam…',
-      uspechH: 'Rejestracja przyjęta!', uspechHH: 'Sprawdź swoją aplikację tutaj', uspechP: 'Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta',
-      nova: '← Nowa rejestracja',
-      errPovinne: 'Pole wymagane', errEmail: 'Podaj prawidłowy e-mail',
-    },
+    // pl: {
+    //   nadpis: 'Rejestracja na bieg weselny',
+    //   jmeno: 'Imię', prijmeni: 'Nazwisko',
+    //   datum: 'Data urodzenia', pohlavi: 'Płeć',
+    //   pohlaviVolby: ['— Wybierz —', 'Mężczyzna', 'Kobieta', 'Nie podano'],
+    //   email: 'E-mail',
+    //   disciplina: 'Wybierz swoją dyscyplinę',
+    //   behNazev: 'Bieg 8 km', behPopis: 'Trasa przez las i pola',
+    //   proseccoNazev: 'Prosecco', proseccoPopis: 'Dla pozostałych',
+    //   errDisciplina: 'Wybierz dyscyplinę',
+    //   vekovaKat: 'Kategoria wiekowa',
+    //   klub: 'Klub / sekcja', klubOpt: 'opcjonalne',
+    //   team: 'Drużyna',
+    //   teamVolby: ['— Wybierz —', 'Pan młody', 'Panna młoda', 'Obydwoje'],
+    //   errTeam: 'Pole wymagane',
+    //   gdprText: 'Wyrażam zgodę na przetwarzanie danych osobowych zgodnie z RODO',
+    //   errGdpr: 'Zgoda jest wymagana',
+    //   fotoText: 'Wyrażam zgodę na wykonanie i publikację zdjęć z zawodów',
+    //   errFoto: 'Zgoda jest wymagana',
+    //   odeslat: 'Wyślij rejestrację', odesilam: 'Wysyłam…',
+    //   uspechH: 'Rejestracja przyjęta!', uspechHH: 'Sprawdź swoją aplikację tutaj', uspechP: 'Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta',
+    //   nova: '← Nowa rejestracja',
+    //   errPovinne: 'Pole wymagane', errEmail: 'Podaj prawidłowy e-mail',
+    // },
     en: {
       nadpis: 'Wedding Run Registration',
       jmeno: 'First name', prijmeni: 'Last name',
@@ -370,7 +370,7 @@
       pohlaviVolby: ['— Select —', 'Male', 'Female', 'Prefer not to say'],
       email: 'E-mail',
       disciplina: 'Choose your discipline',
-      behNazev: '8 km Run', behPopis: 'Forest and field trail',
+      behNazev: '8 km Run', behPopis: 'Run around Vodné Dielo',
       proseccoNazev: 'Prosecco', proseccoPopis: 'For everyone else',
       errDisciplina: 'Please select a discipline',
       vekovaKat: 'Age category',
@@ -383,7 +383,7 @@
       fotoText: 'I consent to photos being taken and published from the event',
       errFoto: 'Consent is required',
       odeslat: 'Submit registration', odesilam: 'Submitting…',
-      uspechH: 'Registration received!', uspechHH: 'Check your application here', uspechP: 'Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta Tu bude nějakých skvělých 3 až 7 vět které s největší pravděpodobností napíše ing. mudr. Dušan Merta',
+      uspechH: 'Registration received!', uspechHH: 'Check your application here', uspechP: "Thank you for your registration. We're glad you'll be running with us or just sitting.",
       nova: '← New registration',
       errPovinne: 'Required field', errEmail: 'Enter a valid e-mail',
     }
@@ -413,8 +413,7 @@
     document.querySelector('label[for="team"]').textContent = t.team;
     const teamOpts = document.querySelectorAll('#team option');
     t.teamVolby.forEach((v, i) => { if (teamOpts[i]) teamOpts[i].textContent = v; });
-    document.getElementById('label-gdpr').innerHTML = t.gdprText + ' <span style="color:#e53e3e">*</span>';
-    document.getElementById('err-gdpr').textContent = t.errGdpr;
+    document.getElementById('label-gdpr').innerHTML = t.gdprText;
     document.getElementById('label-foto').innerHTML = t.fotoText + ' <span style="color:#e53e3e">*</span>';
     document.getElementById('err-foto').textContent = t.errFoto;
     document.getElementById('btnText').textContent = t.odeslat;
@@ -424,8 +423,8 @@
     document.querySelectorAll('#f-jmeno .error-msg, #f-prijmeni .error-msg, #f-datum .error-msg, #f-pohlavi .error-msg').forEach(e => e.textContent = t.errPovinne);
     document.querySelector('#f-email .error-msg').textContent = t.errEmail;
     // Obnov badge pokud je viditelný
-    aktualizujKategorii();
-    ['cs','sk','pl','en'].forEach(l => {
+    // aktualizujKategorii();
+    ['cs','sk','en'].forEach(l => {
       const b = document.getElementById('btn-' + l);
       b.style.background = l === lang ? '#1a1a1a' : 'transparent';
       b.style.color = l === lang ? '#fff' : '#888';
@@ -485,25 +484,25 @@ function spocitejKategorii(datum, pohlavi, jmeno, prijmeni) {
   return kat ? kat.label[jazyk] : skupina[skupina.length - 1].label[jazyk];
 }
 
-function aktualizujKategorii() {
-  const datum = document.getElementById('datum').value;
-  const pohlavi = document.getElementById('pohlavi').value;
-  const jmeno = document.getElementById('jmeno').value.trim();
-  const prijmeni = document.getElementById('prijmeni').value.trim();
-  const kat = spocitejKategorii(datum, pohlavi, jmeno, prijmeni);
-  const badge = document.getElementById('kategorie-badge');
-  const display = document.getElementById('f-kategorie-display');
-  if (kat && datum) {
-    badge.textContent = '✓ ' + kat;
-    display.style.display = 'block';
-  } else {
-    display.style.display = 'none';
-  }
-}
+// function aktualizujKategorii() {
+//   const datum = document.getElementById('datum').value;
+//   const pohlavi = document.getElementById('pohlavi').value;
+//   const jmeno = document.getElementById('jmeno').value.trim();
+//   const prijmeni = document.getElementById('prijmeni').value.trim();
+//   const kat = spocitejKategorii(datum, pohlavi, jmeno, prijmeni);
+//   const badge = document.getElementById('kategorie-badge');
+//   const display = document.getElementById('f-kategorie-display');
+//   if (kat && datum) {
+//     badge.textContent = '✓ ' + kat;
+//     display.style.display = 'block';
+//   } else {
+//     display.style.display = 'none';
+//   }
+// }
 
-  document.getElementById('datum').addEventListener('change', aktualizujKategorii);
-  document.getElementById('jmeno').addEventListener('input', aktualizujKategorii);
-  document.getElementById('prijmeni').addEventListener('input', aktualizujKategorii);
+  // document.getElementById('datum').addEventListener('change', aktualizujKategorii);
+  // document.getElementById('jmeno').addEventListener('input', aktualizujKategorii);
+  // document.getElementById('prijmeni').addEventListener('input', aktualizujKategorii);
 
   function validate() {
     let ok = true;
@@ -528,9 +527,9 @@ function aktualizujKategorii() {
     if (!document.querySelector('input[name="trat"]:checked')) { tratEl.classList.add('invalid'); ok = false; }
     else tratEl.classList.remove('invalid');
 
-    const gdprEl = document.getElementById('cb-gdpr');
-    if (!document.getElementById('gdpr').checked) { gdprEl.classList.add('invalid'); ok = false; }
-    else gdprEl.classList.remove('invalid');
+    // const gdprEl = document.getElementById('cb-gdpr');
+    // if (!document.getElementById('gdpr').checked) { gdprEl.classList.add('invalid'); ok = false; }
+    // else gdprEl.classList.remove('invalid');
 
     const fotoEl = document.getElementById('cb-foto');
     if (!document.getElementById('foto').checked) { fotoEl.classList.add('invalid'); ok = false; }
@@ -589,9 +588,9 @@ function aktualizujKategorii() {
     })();
 
     const uspechTexty = {
-      eo: { h: 'Registriĝo akceptita!', a: 'Kontrolu vian registraĵon ĉi tie', p: 'HUsa eo CS text', nova: '← Nova registriĝo' },
-      fr: { h: 'Inscription reçue !', a: 'Vérifiez votre inscription ici', p: 'HUsa fr CS text', nova: '← Nouvelle inscription' },
-      ar: { h: '!تم قبول التسجيل', a: 'تحقق من تسجيلك هنا', p: 'HUsa ar CS text', nova: 'تسجيل جديد ←', rtl: true },
+      eo: { h: 'Registriĝo akceptita!', a: 'Kontrolu vian registraĵon ĉi tie', p: 'Dankon pro via registriĝo. Ni ĝojas, ke vi kuros kun ni — aŭ simple sidos.', nova: '← Nova registriĝo' },
+      fr: { h: 'Inscription reçue !', a: 'Vérifiez votre inscription ici', p: 'Merci pour votre inscription. Nous sommes ravis que vous couriez avec nous — ou que vous vous asseyiez tout simplement.', nova: '← Nouvelle inscription' },
+      ar: { h: '!تم قبول التسجيل', a: 'تحقق من تسجيلك هنا', p: 'شكرًا لتسجيلك. يسعدنا أن تركض معنا — أو أن تجلس فقط.', nova: 'تسجيل جديد ←', rtl: true },
     };
 
     if (easterEgg) {
@@ -645,7 +644,7 @@ function aktualizujKategorii() {
       const pohlavi = document.getElementById('pohlavi').value;
       const email = document.getElementById('email').value.trim();
       const trat = document.querySelector('input[name="trat"]:checked');
-      const gdpr = document.getElementById('gdpr').checked;
+      // const gdpr = document.getElementById('gdpr').checked;
       const foto = document.getElementById('foto').checked;
       const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
       const vsePlyni = jmeno && prijmeni && datum && pohlavi && emailOk && trat && gdpr && foto;
@@ -680,7 +679,7 @@ function aktualizujKategorii() {
       btn.style.transition = '';
       card.style.position = 'relative';
 
-      setTimeout(() => { running = false; }, 450);
+      setTimeout(() => { running = false; }, 500);
     });
   })();
 </script>
